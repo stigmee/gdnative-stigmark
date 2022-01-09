@@ -17,7 +17,7 @@ Please be cautious with structure modification
 
 The Rust code provides a C low-level API. But in .cc files you can find a higher interface. However, for this first version, the C++ disables asynchronous calls.
 
-#### Login 
+## Login 
 
 C Rust-compatible code :
 ```C
@@ -34,7 +34,7 @@ std::string stigmark_login(const std::string &mail, const std::string &pass)
 
 todo: change it to int stigmark_login(const std::string &mail, const std::string &pass, const std::string &token) ?
 
-#### Add Collection 
+## Add Collection 
 
 C Rust-compatible code :
 ```C

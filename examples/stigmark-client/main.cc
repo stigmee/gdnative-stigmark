@@ -29,14 +29,6 @@ auto debug = false;
 
 extern void set_stdin_echo(bool enable);
 
-// Compile with VS2019 command prompt
-// cl /EHsc /Zi /Fe:stigmark-client.exe /Iinclude \
-//          examples\stigmark-client\main.cc \
-//          examples\stigmark-client\echo.cc \
-//          examples\stigmark-client\login.cc \
-//          examples\stigmark-client\collection.cc \
-//          target\debug\stigmark_client.lib
-
 void show_usage()
 {
     std::cout << "usage: stigmark-client[.exe] [options] <command> [parameters]\n";

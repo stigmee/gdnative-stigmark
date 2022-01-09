@@ -41,9 +41,9 @@ static void add_collection_callback(void *data, int status)
 int stigmark_add_collection(const std::string &token, const std::vector<std::string> &urls, const std::vector<std::string> &keywords)
 {
     std::cout << "add_collection: urls:\n";
-    auto urls_len = urls.size();
+    size_t urls_len = urls.size();
     auto urls_ptr = std::vector<const char *>(urls_len);
-    for (int i = 0; i < urls_len; i++)
+    for (size_t i = 0; i < urls_len; i++)
     {
         auto url = urls[i].c_str();
         urls_ptr[i] = url;
@@ -51,9 +51,9 @@ int stigmark_add_collection(const std::string &token, const std::vector<std::str
     }
 
     std::cout << "add_collection: keywords:\n";
-    auto keywords_len = keywords.size();
+    size_t keywords_len = keywords.size();
     auto keywords_ptr = std::vector<const char *>(keywords_len);
-    for (int i = 0; i < keywords_len; i++)
+    for (size_t i = 0; i < keywords_len; i++)
     {
         auto keyword = keywords[i].c_str();
         keywords_ptr[i] = keyword;

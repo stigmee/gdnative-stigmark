@@ -35,7 +35,7 @@ static void login_callback(void *data, int status, const char *token)
 {
     struct login_private_data *private_data = static_cast<struct login_private_data *>(data);
     private_data->status = status;
-    private_data->token = strdup(token);
+    private_data->token = token;
 }
 
 std::string stigmark_login(const std::string &mail, const std::string &pass)

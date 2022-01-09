@@ -42,7 +42,7 @@ int stigmark_add_collection(const std::string &token, const std::vector<std::str
 {
     std::cout << "add_collection: urls:\n";
     auto urls_len = urls.size();
-    auto urls_ptr = new const char *[urls_len];
+    auto urls_ptr = std::vector<const char *>(urls_len);
     for (int i = 0; i < urls_len; i++)
     {
         auto url = urls[i].c_str();
@@ -52,7 +52,7 @@ int stigmark_add_collection(const std::string &token, const std::vector<std::str
 
     std::cout << "add_collection: keywords:\n";
     auto keywords_len = keywords.size();
-    auto keywords_ptr = new const char *[keywords_len];
+    auto keywords_ptr = std::vector<const char *>(keywords_len);
     for (int i = 0; i < keywords_len; i++)
     {
         auto keyword = keywords[i].c_str();
@@ -62,27 +62,21 @@ int stigmark_add_collection(const std::string &token, const std::vector<std::str
 
     struct add_collection_private_data private_data = {0};
     int err = stigmark_client_add_collection(token.c_str(),
-                                             urls_ptr, urls_len,
-                                             keywords_ptr, keywords_len,
+                                             urls_ptr.data(), urls_len,
+                                             keywords_ptr.data(), keywords_len,
                                              add_collection_callback, &private_data,
                                              1);
     if (err < 0)
     {
         std::cerr << "add_collection: error " << err << std::endl;
-        delete[] keywords_ptr;
-        delete[] urls_ptr;
         return -1;
     }
 
     if (private_data.status >= 200 && private_data.status < 300)
     {
-        delete[] keywords_ptr;
-        delete[] urls_ptr;
         return 0;
     }
 
     std::cerr << "add_collection: failed with status=" << private_data.status << std::endl;
-    delete[] keywords_ptr;
-    delete[] urls_ptr;
     return -1;
 }

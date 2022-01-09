@@ -34,7 +34,7 @@ struct add_collection_private_data
 
 static void add_collection_callback(void *data, int status)
 {
-    struct add_collection_private_data *private_data = (struct add_collection_private_data *)data;
+    struct add_collection_private_data *private_data = static_cast<struct add_collection_private_data *>(data);
     private_data->status = status;
 }
 

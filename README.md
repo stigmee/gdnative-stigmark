@@ -56,6 +56,18 @@ int stigmark_client_add_collection(const char *token,
                                    int waitsync);
 ```
 
+|name|type|description|note|
+|---|---|---|---|
+|data|void *|private data passed to the callback, because there is no closure in C|not read/written by the Rust code|
+|callback|stigmark_client_login_callback_t|function called by the Rust code when operation done| |
+|token|const char *|user token obtained with stigmark_client_login| |
+|urls_ptr|const char **|array of urls||
+|urls_len|int|number of url in urls array||
+|keywords_ptr|const char **|array of keywords||
+|keywords_len|int|number of keyword in keywords array||
+|status|int|0 or http status returned by server|todo: fix with enum|
+|waitsync|int|if != 0, this blocks the call into the current thread. If 0, the call is totally asynchronous. You thus have to take care, because it means the callback is called in another thread.|this is really a bool: 0 => false, else => true|
+
 C++ interface :
 ```C++
 int stigmark_add_collection(const std::string &token,

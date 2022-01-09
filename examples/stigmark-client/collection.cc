@@ -29,7 +29,7 @@
 
 struct add_collection_private_data
 {
-    int status;
+    int status = -1;
 };
 
 static void add_collection_callback(void *data, int status)
@@ -60,7 +60,7 @@ int stigmark_add_collection(const std::string &token, const std::vector<std::str
         std::cout << "     " << keyword << std::endl;
     }
 
-    struct add_collection_private_data private_data = {0};
+    struct add_collection_private_data private_data;
     int err = stigmark_client_add_collection(token.c_str(),
                                              urls_ptr.data(), urls_len,
                                              keywords_ptr.data(), keywords_len,

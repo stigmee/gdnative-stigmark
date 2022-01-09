@@ -27,7 +27,7 @@
 
 struct login_private_data
 {
-    int status;
+    int status = -1;
     std::string token;
 };
 
@@ -40,7 +40,7 @@ static void login_callback(void *data, int status, const char *token)
 
 std::string stigmark_login(const std::string &mail, const std::string &pass)
 {
-    struct login_private_data private_data = {0};
+    struct login_private_data private_data;
 
     int err = stigmark_client_login(mail.c_str(), pass.c_str(), login_callback, &private_data, 1);
     if (err < 0)

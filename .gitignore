@@ -1,0 +1,8 @@
+/target
+/Cargo.lock
+/*.obj
+/*.pdb
+/*.exe
+/*.ilk
+/a.out
+/.vscode

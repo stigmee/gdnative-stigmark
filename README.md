@@ -19,7 +19,7 @@ The Rust code provides a C low-level API. But in .cc files you can find a higher
 
 ## Login 
 
-C Rust-compatible code :
+C Rust-compatible exported function :
 ```C
 typedef void (*stigmark_client_login_callback_t)(void *data, int status, const char *token);
 int stigmark_client_login(const char *mail, const char *pass,
@@ -36,7 +36,7 @@ todo: change it to int stigmark_login(const std::string &mail, const std::string
 
 ## Add Collection 
 
-C Rust-compatible code :
+C Rust-compatible exported function :
 ```C
 typedef void (*stigmark_add_collection_callback_t)(void *data, int status);
 int stigmark_client_add_collection(const char *token,

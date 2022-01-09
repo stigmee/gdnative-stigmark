@@ -21,9 +21,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <string>
-#include <vector>
 #include <iostream>
+#include <stigmark.h>
 #include "waitgroup.hh"
 
 auto debug = false;

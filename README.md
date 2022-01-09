@@ -35,6 +35,7 @@ int stigmark_client_login(const char *mail, const char *pass,
 |pass|const char *|user password for authentication| |
 |status|int|0 or http status returned by server|todo: fix with enum|
 |token|const char *|login token (Jwt)|This is a parameter required by some othe functions|
+|waitsync|int|if != 0, this blocks the call into the current thread. If 0, the call is totally asynchronous. You thus have to take care, because it means the callback is called in another thread.|this is really a bool: 0 => false, else => true|
 
 C++ interface :
 ```C++

@@ -29,6 +29,7 @@
 #include <iostream>
 #include <mutex>
 #include <condition_variable>
+#include <cassert>
 
 // waitgroup: thank you golang
 class waitgroup
@@ -47,6 +48,7 @@ public:
     void done()
     {
         std::lock_guard<std::mutex> lock(this->mutex);
+        assert(this->counter > 0);
         this->counter--;
         this->condition.notify_all();
     }

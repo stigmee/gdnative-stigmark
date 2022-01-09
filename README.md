@@ -48,5 +48,6 @@ int stigmark_client_add_collection(const char *token,
 
 C++ interface :
 ```C++
-int stigmark_add_collection(const std::string &token, const std::vector<std::string> &urls, const std::vector<std::string> &keywords)
+int stigmark_add_collection(const std::string &token,
+    const std::vector<std::string> &urls, const std::vector<std::string> &keywords)
 ```

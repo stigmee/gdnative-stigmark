@@ -29,10 +29,6 @@
 auto debug = false;
 
 extern void set_stdin_echo(bool enable);
-extern std::string stigmark_login(const std::string &mail, const std::string &pass);
-extern int stigmark_add_collection(const std::string &token,
-                                   const std::vector<std::string> &urls,
-                                   const std::vector<std::string> &keywords);
 
 // Compile with VS2019 command prompt
 // cl /EHsc /Zi /Fe:stigmark-client.exe /Iinclude \

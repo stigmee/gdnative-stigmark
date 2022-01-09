@@ -24,18 +24,14 @@
 #ifndef __STIGMARK_CLIENT_HH
 #define __STIGMARK_CLIENT_HH
 
-#ifdef _WIN32
-#pragma comment(lib, "ncrypt")  // hyper-tls
-#pragma comment(lib, "crypt32") // hyper-tls
-#pragma comment(lib, "secur32") // hyper-tls
-#pragma comment(lib, "ws2_32")
-#pragma comment(lib, "bcrypt")
-#pragma comment(lib, "userenv")
-#pragma comment(lib, "advapi32")
-#pragma comment(lib, "ntdll")
-#endif
-
+#include "win32.h"
 #include "api/login.h"
 #include "api/collection.h"
+
+extern std::string stigmark_login(const std::string &mail, const std::string &pass);
+
+extern int stigmark_add_collection(const std::string &token,
+                                   const std::vector<std::string> &urls,
+                                   const std::vector<std::string> &keywords);
 
 #endif // __STIGMARK_CLIENT_HH

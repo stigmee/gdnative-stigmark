@@ -3,7 +3,7 @@
 This repo contains 2 things :
 
 - a statically / dynamically build (written in) Rust library that provides an API to access remote stigmark server (https://github.com/stigmee/stigmark-rocket-rs).
-- a commande line example written in C++11 that shows how to use that library.
+- a command line example written in C++11 that shows how to use that library.
 
 ### TODO
 

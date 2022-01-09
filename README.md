@@ -6,13 +6,13 @@
 
 struct login_private_data {
     int status;
-    const char *token;  
+    std::string token;
 };
 
 void login_callback(void *data, int status, const char *token) {
     struct login_private_data *private_data = (struct login_private_data *) data;
     private_data->status = status;
-    private_data->token = strdup(token);
+    private_data->token = token;
 }
 
 int main(int, char **) {

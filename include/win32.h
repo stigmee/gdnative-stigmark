@@ -35,4 +35,4 @@
 #pragma comment(lib, "ntdll")
 #endif
 
-#endif __STIGMARK_WIN32_HH
+#endif // __STIGMARK_WIN32_HH

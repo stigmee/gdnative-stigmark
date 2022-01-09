@@ -27,6 +27,15 @@ int stigmark_client_login(const char *mail, const char *pass,
                           int waitsync);
 ```
 
+|name|type|description|note|
+|---|---|---|---|
+|data|void *|private data passed to the callback, because there is no closure in C|not read/written by the Rust code|
+|callback|stigmark_client_login_callback_t|function called by the Rust code when operation done| |
+|mail|const char *|user email for authentication| |
+|pass|const char *|user password for authentication| |
+|status|int|0 or http status returned by server|todo: fix with enum|
+|token|const char *|login token (Jwt)|This is a parameter required by some othe functions|
+
 C++ interface :
 ```C++
 std::string stigmark_login(const std::string &mail, const std::string &pass)

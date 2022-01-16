@@ -74,7 +74,6 @@ pub extern "C" fn stigmark_client_add_collection(
     let token = token.unwrap().as_ptr();
     let token = unsafe { CStr::from_ptr(token) };
     let token = token.to_str().unwrap();
-    let _token = token.to_owned();
 
     // urls_ptr, urls_len
     let urls_len = urls_len as usize;

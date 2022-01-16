@@ -34,7 +34,9 @@ void show_usage()
     std::cout << "usage: stigmark-client[.exe] [options] <command> [parameters]\n";
     std::cout << "commands:\n"
               << "    login <mail>                             try to login\n"
-              << "    add_collection <mail>                    add collection to user's collections [thanks to -u and -k]\n";
+              << "    add_collection <mail>                    add collection to user's collections [thanks to -u and -k]\n"
+              << "    search <keyword>                         search for urls referenced by keyword\n"
+              ;
     std::cout << "options:\n"
               << "    -?, -h:                                  show this help\n"
               << "    -u <url>, --url <url>:                   add url\n"
@@ -51,7 +53,11 @@ std::string ask_credential_and_try_login(const std::string &mail)
     set_stdin_echo(true);
     std::cout << std::endl;
 
-    return stigmark_login(mail, pass);
+    std::string token;
+    if (stigmark_login(mail, pass, token)) {
+        return {};
+    }
+    return token;
 }
 
 int main(int argc, char **argv)
@@ -156,6 +162,29 @@ int main(int argc, char **argv)
         }
 
         return stigmark_add_collection(token, urls, keywords);
+    }
+    
+    if (cmd == "search")
+    {
+        if (argc != 1)
+        {
+            std::cerr << "usage: stigmark-client[.exe] [options] search <keyword>\n";
+            return -1;
+        }
+
+        std::string keyword = (--argc, *argv++);
+        std::vector<stigmark_search_response> urls;
+        int rc = stigmark_search(keyword, urls);
+        if (rc == 0)
+        {
+            for (auto& entry: urls) {
+                std::cout << "keyword_id=" << entry.keyword_id << ", collection_id=" << entry.collection_id << ":\n";
+                for (auto& url: entry.urls) {
+                    std::cout << "    " << url.id << ": " << url.url << std::endl;
+                }
+            }
+        }
+        return 0;
     }
 
     std::cerr << "unknown '" << cmd << "' command" << std::endl;

@@ -38,7 +38,7 @@ static void login_callback(void *data, int status, const char *token)
     private_data->token = token;
 }
 
-std::string stigmark_login(const std::string &mail, const std::string &pass)
+int stigmark_login(const std::string &mail, const std::string &pass, std::string &token)
 {
     struct login_private_data private_data;
 
@@ -46,14 +46,15 @@ std::string stigmark_login(const std::string &mail, const std::string &pass)
     if (err < 0)
     {
         std::cerr << "login: error " << err << std::endl;
-        return "";
+        return -1;
     }
 
     if (private_data.status >= 200 && private_data.status < 300)
     {
-        return private_data.token;
+        token = private_data.token;
+        return 0;
     }
 
     std::cerr << "login: failed with status=" << private_data.status << std::endl;
-    return "";
+    return -1;
 }

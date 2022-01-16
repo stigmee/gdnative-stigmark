@@ -27,16 +27,31 @@
 #include "win32.h"
 #include "api/login.h"
 #include "api/collection.h"
+#include "api/search.h"
 
 #ifdef __cplusplus
 #include <string>
 #include <vector>
 
-extern std::string stigmark_login(const std::string &mail, const std::string &pass);
+extern int stigmark_login(const std::string &mail, const std::string &pass, std::string &token);
 
 extern int stigmark_add_collection(const std::string &token,
                                    const std::vector<std::string> &urls,
                                    const std::vector<std::string> &keywords);
+
+struct stigmark_search_response_url_entry {
+    int id;
+    std::string url;
+};
+
+struct stigmark_search_response {
+    int collection_id;
+    int keyword_id;
+    std::vector<stigmark_search_response_url_entry> urls;
+};
+
+extern int stigmark_search(const std::string &keyword, std::vector<stigmark_search_response> &urls);
+
 #endif
 
 #endif // __STIGMARK_CLIENT_HH

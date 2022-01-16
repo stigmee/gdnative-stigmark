@@ -21,8 +21,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef __STIGMARK_API_COLLECTION_HH
-#define __STIGMARK_API_COLLECTION_HH
+#ifndef __STIGMARK_API_COLLECTION_H
+#define __STIGMARK_API_COLLECTION_H
 
 #ifdef __cplusplus
 extern "C"
@@ -40,4 +40,4 @@ extern "C"
 }
 #endif
 
-#endif // __STIGMARK_API_COLLECTION_HH
+#endif // __STIGMARK_API_COLLECTION_H

@@ -23,3 +23,4 @@
 
 mod login;
 mod collections;
+mod search;

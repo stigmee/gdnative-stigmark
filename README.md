@@ -39,10 +39,8 @@ int stigmark_client_login(const char *mail, const char *pass,
 
 C++ interface :
 ```C++
-std::string stigmark_login(const std::string &mail, const std::string &pass)
+int stigmark_login(const std::string &mail, const std::string &pass, std::string &token)
 ```
-
-todo: change it to int stigmark_login(const std::string &mail, const std::string &pass, const std::string &token) ?
 
 ## Add Collection 
 

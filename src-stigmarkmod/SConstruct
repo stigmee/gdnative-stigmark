@@ -84,7 +84,8 @@ env.Append(
 
 env.Append(
     LIBS=[
-        env.File(os.path.join("godot-cpp/bin", "libgodot-cpp.%s.%s.64%s" % (platform, env["target"], env["LIBSUFFIX"])))
+        env.File(os.path.join("godot-cpp/bin", "libgodot-cpp.%s.%s.64%s" % (platform, env["target"], env["LIBSUFFIX"]))),
+        env.File(os.path.join("..", "target", "debug", "stigmark_client.lib"))
     ]
 )
 

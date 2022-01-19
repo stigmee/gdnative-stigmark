@@ -4,9 +4,9 @@
 #include <Godot.hpp>
 #include <Node.hpp>
 
-namespace godot
+namespace stigmee
 {
-    class Stigmark : public Reference
+    class Stigmark : public godot::Reference
     {
         GODOT_CLASS(Stigmark, Reference);
 
@@ -15,7 +15,8 @@ namespace godot
         static void _init();
 
     public:
-        String login(String p_mail, String p_pass);
+        godot::String login(godot::String p_mail, godot::String p_pass);
+        godot::String Stigmark::search(godot::String p_keyword);
 
         Stigmark();
     };

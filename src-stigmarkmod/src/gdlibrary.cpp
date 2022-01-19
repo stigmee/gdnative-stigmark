@@ -17,6 +17,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle)
     // godot::Godot::print("godot_nativescript_init\n");
     godot::Godot::nativescript_init(handle);
     // godot::Godot::print("registering class\n");
-    godot::register_class<godot::Stigmark>();
+    godot::register_class<stigmee::Stigmark>();
     // godot::Godot::print("Stigmark classname='%s'\n", godot::Stigmark::___get_class_name());
 }

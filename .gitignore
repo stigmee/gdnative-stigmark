@@ -17,3 +17,4 @@
 /src-stigmarkmod/.sconsign.dblite
 /src-stigmarkmod/project
 /src-stigmarkmod/src/*.os
+src-stigmarkmod/src/*.obj

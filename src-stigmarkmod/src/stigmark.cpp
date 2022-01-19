@@ -1,29 +1,37 @@
 #include "stigmark.h"
 
-using namespace godot;
-
-// stigmark methods
-
-String Stigmark::login(String p_mail, String p_pass)
+namespace stigmee
 {
-	// godot::Godot::print(" - Stigmark::login\n");
-	return "Hello Stigmers";
-}
 
-// init
+	// stigmark methods
 
-void Stigmark::_init()
-{
-	// godot::Godot::print(" - Stigmark::_init\n");
-}
+	godot::String Stigmark::login(godot::String p_mail, godot::String p_pass)
+	{
+		// godot::Godot::print(" - Stigmark::login\n");
+		return "Hello Stigmers";
+	}
 
-void Stigmark::_register_methods()
-{
-	// godot::Godot::print(" - Stigmark::_register_methods\n");
-	register_method("login", &Stigmark::login);
-}
+	godot::String Stigmark::search(godot::String p_keyword)
+	{
+		// godot::Godot::print(" - Stigmark::login\n");
+		return "Hello Stigmers";
+	}
 
-Stigmark::Stigmark()
-{
-	// godot::Godot::print(" - Stigmark::Stigmark\n");
+	// init
+
+	void Stigmark::_init()
+	{
+		// godot::Godot::print(" - Stigmark::_init\n");
+	}
+
+	void Stigmark::_register_methods()
+	{
+		// godot::Godot::print(" - Stigmark::_register_methods\n");
+		register_method("login", &Stigmark::login);
+	}
+
+	Stigmark::Stigmark()
+	{
+		// godot::Godot::print(" - Stigmark::Stigmark\n");
+	}
 }

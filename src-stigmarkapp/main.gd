@@ -23,10 +23,14 @@
 
 extends Node2D
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	var s = Stigmark.new()
-	var urls = s.search("mariadb")
-	for url in urls:
-		print(url)
-	pass # Replace with function body.
+	var collections = s.search("bitcoin")
+	for collection in collections:
+		var collection_id = collection.collection_id;
+		var keyword_id = collection.keyword_id;
+		var urls = collection.urls;
+		print("collection: ", collection_id, ", keyword: ", keyword_id)
+		for url in urls:
+			print("  ", url.id, ": ", url.uri)
+	pass

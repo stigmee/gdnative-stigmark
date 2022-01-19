@@ -2,21 +2,6 @@
 
 namespace stigmee
 {
-
-	// stigmark methods
-
-	godot::String Stigmark::login(godot::String p_mail, godot::String p_pass)
-	{
-		// godot::Godot::print(" - Stigmark::login\n");
-		return "Hello Stigmers";
-	}
-
-	godot::String Stigmark::search(godot::String p_keyword)
-	{
-		// godot::Godot::print(" - Stigmark::login\n");
-		return "Hello Stigmers";
-	}
-
 	// init
 
 	void Stigmark::_init()
@@ -28,6 +13,7 @@ namespace stigmee
 	{
 		// godot::Godot::print(" - Stigmark::_register_methods\n");
 		register_method("login", &Stigmark::login);
+		register_method("search", &Stigmark::search);
 	}
 
 	Stigmark::Stigmark()

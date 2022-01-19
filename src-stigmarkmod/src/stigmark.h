@@ -16,7 +16,7 @@ namespace stigmee
 
     public:
         godot::String login(godot::String p_mail, godot::String p_pass);
-        godot::String Stigmark::search(godot::String p_keyword);
+        godot::Array Stigmark::search(godot::String p_keyword);
 
         Stigmark();
     };

@@ -7,3 +7,13 @@
 /a.out
 /.vscode
 /stigmark-client
+/src-gd*
+/src-stigmarkapp/bin/win64/libstigmark.dll
+/src-stigmarkapp/bin/osx/libstigmark.dylib
+/src-stigmarkapp/bin/x11/libstigmark.so
+/src-stigmarkmod/godot-cpp
+/src-stigmarkmod/logs
+/src-stigmarkmod/.gitmodules
+/src-stigmarkmod/.sconsign.dblite
+/src-stigmarkmod/project
+/src-stigmarkmod/src/*.os

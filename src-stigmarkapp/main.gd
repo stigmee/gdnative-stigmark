@@ -24,13 +24,29 @@
 extends Node2D
 
 func _ready():
+	pass
+	
+var keyword = ""
+
+func _on_Button_pressed():
+	var lines = get_node("TextEdit")
+	
 	var s = Stigmark.new()
-	var collections = s.search("bitcoin")
+	var collections = s.search(keyword)
+	var n = 0
 	for collection in collections:
 		var collection_id = collection.collection_id;
 		var keyword_id = collection.keyword_id;
 		var urls = collection.urls;
-		print("collection: ", collection_id, ", keyword: ", keyword_id)
+		lines.text = lines.text + "collection: %d, keyword: %d\n" % [collection_id, keyword_id]
 		for url in urls:
-			print("  ", url.id, ": ", url.uri)
-	pass
+			n += 1
+			lines.text = lines.text + "  %d: %s\n" % [url.id, url.uri]
+	if n == 0:
+		lines.text = lines.text + "not found\n"
+	pass # Replace with function body.
+
+
+func _on_LineEdit_text_changed(new_text):
+	keyword = new_text
+	pass # Replace with function body.

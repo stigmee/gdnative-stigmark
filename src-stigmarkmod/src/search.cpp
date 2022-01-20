@@ -29,7 +29,7 @@ namespace stigmee
 	struct search_private_data
 	{
 		int status = -1;
-		std::vector<stigmark_search_response> collections;
+		godot::Array collections;
 	};
 
 	static void search_callback(void *data, int status, stigmark_client_search_response_t *res_ptr, int res_count)
@@ -37,35 +37,31 @@ namespace stigmee
 		struct search_private_data *private_data = static_cast<struct search_private_data *>(data);
 		private_data->status = status;
 
-		std::vector<stigmark_search_response> collections;
-
 		for (int r = 0; r < res_count; r++)
 		{
-			stigmark_search_response res;
+			godot::Dictionary gdcol;
 
-			res.collection_id = res_ptr[r].collection_id;
-			res.keyword_id = res_ptr[r].keyword_id;
+			gdcol["collection_id"] = res_ptr[r].collection_id;
+			gdcol["keyword_id"] = res_ptr[r].keyword_id;
 
+			godot::Array gdurls;
 			for (int u = 0; u < res_ptr[r].urls_count; u++)
 			{
-				stigmark_search_response_url_entry url_entry;
+				godot::Dictionary gdurl;
 
-				url_entry.id = res_ptr[r].urls_ptr[u].id;
-				url_entry.url = res_ptr[r].urls_ptr[u].url;
-
-				res.urls.push_back(url_entry);
+				gdurl["id"] = res_ptr[r].urls_ptr[u].id;
+				gdurl["uri"] = res_ptr[r].urls_ptr[u].url;
+				gdurls.push_back(gdurl);
 			}
-			collections.push_back(res);
-		}
 
-		// copy
-		private_data->collections = collections;
+			gdcol["urls"] = gdurls;
+			private_data->collections.push_back(gdcol);
+		}
 	}
 
 	godot::Array Stigmark::search(godot::String p_keyword)
 	{
 		struct search_private_data private_data;
-		godot::Array array;
 
 		godot::Godot::print(" - Stigmark::search\n");
 
@@ -77,36 +73,16 @@ namespace stigmee
 
 		if (err < 0)
 		{
-			array.push_back("Stigmark::search failed with error");
-			array.push_back(err);
-			return array;
+			godot::Godot::print("Stigmark::search failed with error");
+			return private_data.collections;
 		}
 
 		if (private_data.status >= 200 && private_data.status < 300)
 		{
-			for (auto& collection: private_data.collections) {
-				godot::Dictionary gdcol;
-
-				gdcol["collection_id"] = collection.collection_id;
-				gdcol["keyword_id"] = collection.keyword_id;
-
-				godot::Array gdurls;
-				for (auto& url: collection.urls) {
-					godot::Dictionary gdurl;
-
-					gdurl["id"] = url.id;
-					gdurl["uri"] = url.url.c_str();
-					gdurls.push_back(gdurl);
-				}
-
-				gdcol["urls"] = gdurls;
-				array.push_back(gdcol);
-			}
-			return array;
+			return private_data.collections;
 		}
 
-		array.push_back("Stigmark::search failed with status");
-		array.push_back(private_data.status);
-		return array;
+		godot::Godot::print("Stigmark::search failed with status");
+		return private_data.collections;
 	}
 }

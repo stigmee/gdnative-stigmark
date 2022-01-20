@@ -46,6 +46,8 @@ pub async fn stigmark_client_search_by_keyword_blocking(
     let uri = Uri::builder()
         .scheme("https")
         .authority("stigmark.stigmee.fr")
+        // .scheme("http")
+        // .authority("localhost:8000")
         .path_and_query(
             format!(
                 "/api/v1/search?q={}",
@@ -55,7 +57,7 @@ pub async fn stigmark_client_search_by_keyword_blocking(
         )
         .build();
     if let Err(err) = uri {
-        log::error!(
+        eprintln!(
             "stigmark_client_search_by_keyword_blocking: could not parse url: {}",
             err
         );
@@ -68,7 +70,7 @@ pub async fn stigmark_client_search_by_keyword_blocking(
         .uri(&uri)
         .body(Body::empty());
     if let Err(err) = req {
-        log::error!(
+        eprintln!(
             "stigmark_client_search_by_keyword_blocking: could not create request: {}",
             err
         );
@@ -76,7 +78,7 @@ pub async fn stigmark_client_search_by_keyword_blocking(
     }
     let req = req.unwrap();
 
-    log::debug!(
+    println!(
         "stigmark_client_search_by_keyword_blocking: waiting {:#?}",
         req
     );
@@ -85,7 +87,7 @@ pub async fn stigmark_client_search_by_keyword_blocking(
         .build::<_, hyper::Body>(https)
         .request(req);
 
-    log::debug!("stigmark_client_search_by_keyword_blocking: response");
+    println!("stigmark_client_search_by_keyword_blocking: response");
     match response.await {
         Ok(res) => {
             let status = res.status();
@@ -95,7 +97,7 @@ pub async fn stigmark_client_search_by_keyword_blocking(
             }
 
             let (head, body) = res.into_parts();
-            log::debug!("head={:#?}", head);
+            println!("head={:#?}", head);
             match to_bytes(body).await {
                 Ok(body) => {
                     let body_str = std::str::from_utf8(&*body).unwrap_or("invalid body");
@@ -103,11 +105,11 @@ pub async fn stigmark_client_search_by_keyword_blocking(
                         serde_json::from_str(body_str).unwrap_or(vec![]);
                     cb(status.as_u16() as i32, Some(&collections));
                 }
-                Err(err) => log::debug!("could not decode body: {}", err),
+                Err(err) => println!("could not decode body: {}", err),
             }
         }
         Err(err) => {
-            log::error!(
+            eprintln!(
                 "stigmark_client_search_by_keyword_blocking: response failed: {}",
                 err
             );

@@ -22,20 +22,13 @@
 //
 
 #include "stigmark.h"
-#include "../../include/stigmark.h"
 
 namespace stigmee
 {
-	struct search_private_data
+	static void search_async_callback(void *data, int status, stigmark_client_search_response_t *res_ptr, int res_count)
 	{
-		int status = -1;
+		Stigmark *stigmark = static_cast<Stigmark*>(data);
 		godot::Array collections;
-	};
-
-	static void search_callback(void *data, int status, stigmark_client_search_response_t *res_ptr, int res_count)
-	{
-		struct search_private_data *private_data = static_cast<struct search_private_data *>(data);
-		private_data->status = status;
 
 		for (int r = 0; r < res_count; r++)
 		{
@@ -55,34 +48,31 @@ namespace stigmee
 			}
 
 			gdcol["urls"] = gdurls;
-			private_data->collections.push_back(gdcol);
+			collections.push_back(gdcol);
 		}
+
+		stigmark->emit_search_collection(collections);
 	}
 
-	godot::Array Stigmark::search(godot::String p_keyword)
+	void Stigmark::emit_search_collection(godot::Array collections)
 	{
-		struct search_private_data private_data;
+		godot::Array args;
+		args.push_back(collections);
+		emit_signal("on_search", args);
+	}
 
-		godot::Godot::print("Stigmark::search");
+	void Stigmark::search_async(godot::String p_keyword)
+	{
+		godot::Godot::print("Stigmark::search_async");
 
 		const char *keyword = p_keyword.alloc_c_string();
 
 		int err = stigmark_client_search_by_keyword(
-			keyword, search_callback, &private_data, 1);
+			keyword, search_async_callback, this, 0);
+
 		godot::api->godot_free((void*) keyword);
 
 		if (err < 0)
-		{
-			godot::Godot::print("Stigmark::search failed with error");
-			return private_data.collections;
-		}
-
-		if (private_data.status >= 200 && private_data.status < 300)
-		{
-			return private_data.collections;
-		}
-
-		godot::Godot::print("Stigmark::search failed with status");
-		return private_data.collections;
+			godot::Godot::print("Stigmark::search_async failed with error");
 	}
 }

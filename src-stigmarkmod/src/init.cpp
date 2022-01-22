@@ -35,8 +35,15 @@ namespace stigmee
 	void Stigmark::_register_methods()
 	{
 		// godot::Godot::print(" - Stigmark::_register_methods\n");
-		register_method("login", &Stigmark::login);
-		register_method("search", &Stigmark::search);
+
+		godot::register_method("login", &Stigmark::login);
+		godot::register_method("search", &Stigmark::search);
+		godot::register_method("search_async", &Stigmark::search_async);
+
+		godot::Dictionary signal_args;
+		signal_args["collections"] = GODOT_VARIANT_TYPE_ARRAY;
+		godot::String signal_name = "on_search";
+		godot::register_signal<Stigmark>(signal_name, signal_args);
 	}
 
 	Stigmark::Stigmark()

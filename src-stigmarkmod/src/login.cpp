@@ -27,7 +27,8 @@ namespace stigmee
 {
 	godot::String Stigmark::login(godot::String p_mail, godot::String p_pass)
 	{
-		// godot::Godot::print(" - Stigmark::login\n");
+		godot::Godot::print("Stigmark::login\n");
+		// TODO: implement this
 		return "Hello Stigmers";
 	}
 }

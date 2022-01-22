@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
+[ext_resource path="res://bin/stigmark.gdns" type="Script" id=2]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -10,7 +11,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 margin_left = 21.0
 margin_top = 12.0
-margin_right = 869.0
+margin_right = 794.0
 margin_bottom = 36.0
 placeholder_text = "keyword to search"
 __meta__ = {
@@ -18,17 +19,27 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="."]
-margin_left = 910.0
-margin_top = 14.0
-margin_right = 971.0
-margin_bottom = 37.0
+margin_left = 810.0
+margin_top = 12.0
+margin_right = 871.0
+margin_bottom = 36.0
 text = "Search"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ButtonAsync" type="Button" parent="."]
+margin_left = 891.0
+margin_top = 12.0
+margin_right = 995.0
+margin_bottom = 36.0
+text = "Search Async"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TextEdit" type="TextEdit" parent="."]
-margin_left = 26.0
+margin_left = 21.0
 margin_top = 54.0
 margin_right = 995.0
 margin_bottom = 580.0
@@ -37,5 +48,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Stigmark" type="Node" parent="."]
+script = ExtResource( 2 )
+
 [connection signal="text_changed" from="LineEdit" to="." method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="ButtonAsync" to="." method="_on_ButtonAsync_pressed"]
+[connection signal="on_search" from="Stigmark" to="." method="_on_Stigmark_on_search"]

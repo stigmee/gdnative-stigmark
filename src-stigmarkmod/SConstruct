@@ -1,98 +1,157 @@
+#!python
+###############################################################################
+## Stigmee: The art to sanctuarize knowledge exchanges.
+## Copyright 2021-2022 Quentin Quadrat <lecrapouille@gmail.com>
+## Copyright 2021-2022 Alain Duron <duron.alain@gmail.com>
+## Copyright 2021-2022 Philippe Anel <zexigh@gmail.com>
+##
+## This file is part of Stigmee.
+##
+## Stigmee is free software: you can redistribute it and/or modify it
+## under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful, but
+## WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###############################################################################
 import os
 
-opts = Variables(args=ARGUMENTS)
-
-# Define the relative path to the Godot headers.
-godot_headers_path = "godot-cpp/godot-headers"
-godot_bindings_path = "godot-cpp"
-
-# Gets the standard flags CC, CCX, etc.
+opts = Variables([], ARGUMENTS)
 env = DefaultEnvironment()
 
-# Define our options. Use future-proofed names for platforms.
-platform_array = ["", "windows", "linuxbsd", "macos", "x11", "linux", "osx"]
+# Define our options
+platforms = ['windows', 'x11', 'linux', 'linuxbsd', 'macos', 'osx']
+archis = ['x86_64', 'arm64']
 
-opts.Add(EnumVariable("target", "Compilation target", "debug", ["d", "debug", "r", "release"]))
-opts.Add(EnumVariable("platform", "Compilation platform", "", platform_array))
-opts.Add(BoolVariable("use_llvm", "Use the LLVM / Clang compiler", "no"))
-opts.Add(PathVariable("target_path", "The path where the lib is installed.", "project/gdnative/"))
-opts.Add(PathVariable("target_name", "The library name.", "libstigmark", PathVariable.PathAccept))
+# Define our options
+opts.Add(EnumVariable('target', 'Compilation target', '', ['d', 'debug', 'r', 'release']))
+opts.Add(EnumVariable('platform', 'Compilation platform', '', platforms + ['']))
+opts.Add(EnumVariable('arch', 'Platform architecture', 'x86_64', ['x86_64', 'arm64']))
+opts.Add(BoolVariable('use_llvm', 'Use the LLVM / Clang compiler', 'no'))
+opts.Add(PathVariable('workspace', 'The path of Stigmee workspace', '', PathVariable.PathAccept))
+opts.Add(PathVariable('godot_version', 'The Godot version installed in workspace', '3.4.2-stable', PathVariable.PathAccept))
 
 # Updates the environment with the option variables.
 opts.Update(env)
 
+# Process some arguments.
+# For the reference:
+# - CCFLAGS are compilation flags shared between C and C++
+# - CFLAGS are for C-specific compilation flags
+# - CXXFLAGS are for C++-specific compilation flags
+# - CPPFLAGS are for pre-processor flags
+# - CPPDEFINES are for pre-processor defines
+# - LINKFLAGS are for linking flags
+if env['use_llvm']:
+    env['CC'] = 'clang'
+    env['CXX'] = 'clang++'
+
 # Process platform arguments. Here we use the same names as GDNative.
-if env["platform"] == "macos":
-    env["platform"] = "osx"
-elif env["platform"] in ("x11", "linuxbsd"):
-    env["platform"] = "linux"
-elif env["platform"] == "bsd":
-    env["platform"] = "freebsd"
-if env["platform"] == "":
-    print("No valid target platform selected.")
+platform = env['platform']
+if platform == 'macos':
+    platform = 'osx'
+elif platform in ('x11', 'linuxbsd'):
+    platform = 'linux'
+elif platform == 'bsd':
+    platform = 'freebsd'
+if platform == '':
+    print('No valid target platform selected.')
     quit()
 
-platform = env["platform"]
+# Check if the Stigmee workspace is known
+workspace = env['workspace']
+if workspace == '':
+    print('You shall define the path of the Stigmee workspace.')
+    print('Please pass the content your environement variable WORKSPACE_STIGMEE')
+    quit();
+if not os.path.isdir(workspace):
+    print('The argument workspace ' + workspace + ' path is invalid')
+    print('Please pass the content your environement variable WORKSPACE_STIGMEE')
+    quit();
 
-# Check our platform specifics.
-if platform == "osx":
-    if not env["use_llvm"]:
-        env["use_llvm"] = "yes"
-    if env["target"] in ("debug", "d"):
-        env.Append(CCFLAGS=["-g", "-O2", "-arch", "x86_64", "-arch", "arm64", "-std=c++14"])
-        env.Append(LINKFLAGS=["-arch", "x86_64", "-arch", "arm64"])
+# Check if Godot exists
+godot_api_path = workspace + '/godot/' + env['godot_version'] + '/cpp'
+if not os.path.isdir(godot_api_path):
+    print('The Godot path ' + godot_api_path + ' is invalid.')
+    print('Please pass the content your environement variable WORKSPACE_STIGMEE')
+    quit();
+
+# Compile either in release or debug mode
+compile_mode = env['target']
+if compile_mode == 'd':
+    compile_mode = 'debug'
+elif compile_mode == 'r':
+    compile_mode = 'release'
+
+# Only support 64 at this time
+# FIXME manage ARM
+archi = '64'
+if platform == 'osx':
+    archi = 'x86_64'
+
+# The godot library we want to create
+target_path = workspace + '/stigmee/build'
+target_library = 'libstigmark'
+
+# Platform specific compilation
+if platform == 'osx':
+    env.Append(CXXFLAGS=['-std=c++17'])
+    env.Append(CCFLAGS=['-arch', 'x86_64', '-arch', 'arm64'])
+    env.Append(LINKFLAGS=['-arch', 'x86_64', '-arch', 'arm64'])
+    if compile_mode == 'debug':
+        env.Append(CCFLAGS=['-g', '-O2'])
     else:
-        env.Append(CCFLAGS=["-g", "-O3", "-arch", "x86_64", "-arch", "arm64", "-std=c++14"])
-        env.Append(LINKFLAGS=["-arch", "x86_64", "-arch", "arm64"])
-elif platform == "linux":
-    if env["target"] in ("debug", "d"):
-        env.Append(CCFLAGS=["-fPIC", "-g3", "-Og"])
+        env.Append(CCFLAGS=['-g', '-O3'])
+
+elif platform == 'linux':
+    env.Append(CXXFLAGS=['-std=c++17'])
+    if compile_mode == 'debug':
+        env.Append(CCFLAGS=['-g3', '-Og'])
     else:
-        env.Append(CCFLAGS=["-fPIC", "-g", "-O3"])
-elif platform == "windows":
+        env.Append(CCFLAGS=['-g', '-O3'])
+    env.Append(CCFLAGS=['-fPIC'])
+
+elif platform == 'windows':
     # This makes sure to keep the session environment variables
     # on Windows, so that you can run scons in a VS 2017 prompt
     # and it will find all the required tools.
     env = Environment(ENV=os.environ)
-    opts.Update(env)
-
-    env.Append(CCFLAGS=["-DWIN32", "-D_WIN32", "-D_WINDOWS", "-W3", "-GR", "-D_CRT_SECURE_NO_WARNINGS"])
-    if env["target"] in ("debug", "d"):
-        env.Append(CCFLAGS=["-EHsc", "-D_DEBUG", "-MDd"])
+    env.Append(CPPDEFINES=['WIN32', '_WIN32', '_WINDOWS', '_CRT_SECURE_NO_WARNINGS'])
+    env.Append(CCFLAGS=['-W3', '-GR'])
+    env.Append(CXXFLAGS='/std:c++17')
+    if compile_mode == 'debug':
+        env.Append(CPPDEFINES=['_DEBUG'])
+        env.Append(CCFLAGS=['-EHsc', '-MDd', '-ZI'])
+        env.Append(LINKFLAGS=['-DEBUG'])
     else:
-        env.Append(CCFLAGS=["-O2", "-EHsc", "-DNDEBUG", "-MD"])
+        env.Append(CPPDEFINES=['NDEBUG'])
+        env.Append(CCFLAGS=['-O2', '-EHsc', '-MD'])
 
-if env["use_llvm"] == "yes":
-    env["CC"] = "clang"
-    env["CXX"] = "clang++"
+# Pathes of Godot header files
+godot_api_path = workspace + '/godot/' + env['godot_version'] + '/cpp'
+env.Append(CPPPATH=['.',
+                    godot_api_path + '/godot-headers',
+                    godot_api_path + '/include',
+                    godot_api_path + '/include/core',
+                    godot_api_path + '/include/gen'])
 
-SConscript("godot-cpp/SConstruct")
+# Godot library that is linked against our library
+libgodot = 'libgodot-cpp.' + platform + '.' + compile_mode + '.' + archi
+env.Append(LIBS=[libgodot], LIBPATH=[godot_api_path + '/bin'])
 
-def add_sources(sources, dir):
-    for f in os.listdir(dir):
-        if f.endswith(".cpp"):
-            sources.append(dir + "/" + f)
+# Pathes header files of our module
+env.Append(CPPPATH=['src/'])
 
-env.Append(
-    CPPPATH=[
-        godot_headers_path,
-        godot_bindings_path + "/include",
-        godot_bindings_path + "/include/gen/",
-        godot_bindings_path + "/include/core/",
-    ]
-)
-
-env.Append(
-    LIBS=[
-        env.File(os.path.join("godot-cpp/bin", "libgodot-cpp.%s.%s.64%s" % (platform, env["target"], env["LIBSUFFIX"]))),
-        env.File(os.path.join("..", "target", "debug", "stigmark_client.lib"))
-    ]
-)
-
-env.Append(LIBPATH=[godot_bindings_path + "/bin/"])
-
-sources = []
-add_sources(sources, "src")
-
-library = env.SharedLibrary(target=env["target_path"] + "/" + platform + "/" + env["target_name"], source=sources)
+# Compile the library
+sources = Glob('src/*.cpp')
+library = env.SharedLibrary(target=target_path + '/' + target_library, source=sources)
 Default(library)
+
+# Generates help for the -h scons option.
+Help(opts.GenerateHelpText(env))

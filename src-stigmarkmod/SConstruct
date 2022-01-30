@@ -134,7 +134,7 @@ elif platform == 'windows':
         env.Append(CCFLAGS=['-O2', '-EHsc', '-MD'])
 
 # Pathes of Godot header files
-godot_api_path = workspace + '/godot/' + env['godot_version'] + '/cpp'
+#godot_api_path = workspace + '/godot/' + env['godot_version'] + '/cpp'
 env.Append(CPPPATH=['.',
                     godot_api_path + '/godot-headers',
                     godot_api_path + '/include',
@@ -144,6 +144,7 @@ env.Append(CPPPATH=['.',
 # Godot library that is linked against our library
 libgodot = 'libgodot-cpp.' + platform + '.' + compile_mode + '.' + archi
 env.Append(LIBS=[libgodot], LIBPATH=[godot_api_path + '/bin'])
+env.Append(LIBS=[env.File(os.path.join("..", "target", "debug", "stigmark_client.lib"))])
 
 # Pathes header files of our module
 env.Append(CPPPATH=['src/'])

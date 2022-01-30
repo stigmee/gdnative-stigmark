@@ -143,8 +143,9 @@ env.Append(CPPPATH=['.',
 
 # Godot library that is linked against our library
 libgodot = 'libgodot-cpp.' + platform + '.' + compile_mode + '.' + archi
+libstigmark_client = 'libstigmark_client' + ('.lib' if platform == 'windows' else '.a')
 env.Append(LIBS=[libgodot], LIBPATH=[godot_api_path + '/bin'])
-env.Append(LIBS=[env.File(os.path.join("..", "target", "debug", "stigmark_client.lib"))])
+env.Append(LIBS=[libstigmark_client], LIBPATH=['../target/debug'])
 
 # Pathes header files of our module
 env.Append(CPPPATH=['src/'])

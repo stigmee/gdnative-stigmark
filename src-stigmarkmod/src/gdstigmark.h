@@ -22,18 +22,21 @@
 //
 
 #ifndef __GODOT_MODULE_STIGMARK_H
-#define __GODOT_MODULE_STIGMARK_H
+#  define __GODOT_MODULE_STIGMARK_H
 
-#include <Godot.hpp>
-#include <Node.hpp>
-#include <Object.hpp>
-#include "../../include/stigmark.h"
+// Godot header files
+#  include "Godot.hpp"
+#  include "Node.hpp"
+#  include "Object.hpp"
+
+// Stigmark
+#  include "stigmark.h"
 
 namespace stigmee
 {
     class Stigmark : public godot::Node
     {
-        GODOT_CLASS(Stigmark, Node);
+        GODOT_CLASS(Stigmark, Node)
 
     public:
         static void _register_methods();

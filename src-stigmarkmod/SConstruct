@@ -140,6 +140,30 @@ env.Append(CPPPATH=['.',
                     godot_api_path + '/include/core',
                     godot_api_path + '/include/gen'])
 
+# Unix compilation flags
+if platform == 'linux' or platform == 'osx':
+    # gcc/clang compilation flags
+    env.Append(CXXFLAGS=['-Wall', '-Wextra', '-Wuninitialized', '-Wundef',
+                         '-Wunused', '-Wunused-result', '-Wunused-parameter',
+                         '-Wtype-limits', '-Wcast-align', '-Wcast-qual',
+                         '-Wconversion', '-Wfloat-equal', '-Wpointer-arith',
+                         '-Wswitch-enum', '-Wpacked', '-Wold-style-cast',
+                         '-Wdeprecated', '-Wvariadic-macros', '-Wvla',
+                         '-Wsign-conversion'])
+
+    # clang specific flags
+    if env['use_llvm']:
+        env.Append(CXXFLAGS=['-Wused-but-marked-unused', '-Wzero-length-array',
+                             '-Wunused-member-function', '-Wvector-conversion',
+                             '-Wunused-getter-return-value', '-Wthread-safety',
+                             '-Wunneeded-member-function', '-Wshadow-all',
+                             '-Wunused-exception-parameter',
+                             '-Wunneeded-internal-declaration',
+                             '-Wunreachable-code-aggressive',
+                             '-Wsuper-class-method-mismatch',
+                             '-Werror=implicit-function-declaration',
+                             '-Wtautological-compare'])
+
 # Godot library that is linked against our library
 libgodot = 'libgodot-cpp.' + platform + '.' + compile_mode + '.' + archi
 libstigmark_client = 'libstigmark_client' + ('.lib' if platform == 'windows' else '.a')
@@ -147,7 +171,7 @@ env.Append(LIBS=[libgodot], LIBPATH=[godot_api_path + '/bin'])
 env.Append(LIBS=[libstigmark_client], LIBPATH=['../target/debug'])
 
 # Pathes header files of our module
-env.Append(CPPPATH=['src/'])
+env.Append(CPPPATH=['src', '../include'])
 
 # Compile the library
 sources = Glob('src/*.cpp')

@@ -48,7 +48,7 @@ opts.Update(env)
 # - CPPFLAGS are for pre-processor flags
 # - CPPDEFINES are for pre-processor defines
 # - LINKFLAGS are for linking flags
-if env['use_llvm']:
+if env['use_llvm'] or env['platform'] == 'osx':
     env['CC'] = 'clang'
     env['CXX'] = 'clang++'
 
@@ -63,6 +63,13 @@ elif platform == 'bsd':
 if platform == '':
     print('No valid target platform selected.')
     quit()
+
+# X86 or ARM
+archi = env['arch']
+arch_ext = archi
+if archi == 'x86_64':
+    if platform != 'osx':
+        arch_ext = '64'
 
 # Check if the Stigmee workspace is known
 workspace = env['workspace']
@@ -89,28 +96,22 @@ if compile_mode == 'd':
 elif compile_mode == 'r':
     compile_mode = 'release'
 
-# Only support 64 at this time
-# FIXME manage ARM
-archi = '64'
-if platform == 'osx':
-    archi = 'x86_64'
-
 # The godot library we want to create
 target_path = workspace + '/stigmee/build'
 target_library = 'libstigmark'
 
 # Platform specific compilation
 if platform == 'osx':
-    env.Append(CXXFLAGS=['-std=c++17'])
-    env.Append(CCFLAGS=['-arch', 'x86_64', '-arch', 'arm64'])
-    env.Append(LINKFLAGS=['-arch', 'x86_64', '-arch', 'arm64'])
+    env.Append(CXXFLAGS=['--std=c++17'])
+    env.Append(CCFLAGS=['-arch', archi])
+    env.Append(LINKFLAGS=['-arch', archi])
     if compile_mode == 'debug':
         env.Append(CCFLAGS=['-g', '-O2'])
     else:
         env.Append(CCFLAGS=['-g', '-O3'])
 
 elif platform == 'linux':
-    env.Append(CXXFLAGS=['-std=c++17'])
+    env.Append(CXXFLAGS=['--std=c++17'])
     if compile_mode == 'debug':
         env.Append(CCFLAGS=['-g3', '-Og'])
     else:
@@ -165,7 +166,7 @@ if platform == 'linux' or platform == 'osx':
                              '-Wtautological-compare'])
 
 # Godot library that is linked against our library
-libgodot = 'libgodot-cpp.' + platform + '.' + compile_mode + '.' + archi
+libgodot = 'libgodot-cpp.' + platform + '.' + compile_mode + '.' + arch_ext
 libstigmark_client = 'libstigmark_client' + ('.lib' if platform == 'windows' else '.a')
 env.Append(LIBS=[libgodot], LIBPATH=[godot_api_path + '/bin'])
 env.Append(LIBS=[libstigmark_client], LIBPATH=['../target/debug'])

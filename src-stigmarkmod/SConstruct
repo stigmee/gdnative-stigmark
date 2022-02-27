@@ -22,14 +22,22 @@
 ###############################################################################
 import os
 
-opts = Variables([], ARGUMENTS)
-env = DefaultEnvironment()
+# We let SCons build its default ENV as it includes OS-specific things which we don't
+# want to have to pull in manually.
+# Then we prepend PATH to make it take precedence, while preserving SCons' own entries.
+custom_tools = ["default"]
+env = Environment(tools=custom_tools)
+env.PrependENVPath("PATH", os.getenv("PATH"))
+env.PrependENVPath("PKG_CONFIG_PATH", os.getenv("PKG_CONFIG_PATH"))
+if "TERM" in os.environ:  # Used for colored output.
+    env["ENV"]["TERM"] = os.environ["TERM"]
 
 # Define our options
 platforms = ['windows', 'x11', 'linux', 'linuxbsd', 'macos', 'osx']
 archis = ['x86_64', 'arm64']
 
 # Define our options
+opts = Variables([], ARGUMENTS)
 opts.Add(EnumVariable('target', 'Compilation target', '', ['d', 'debug', 'r', 'release']))
 opts.Add(EnumVariable('platform', 'Compilation platform', '', platforms + ['']))
 opts.Add(EnumVariable('arch', 'Platform architecture', 'x86_64', ['x86_64', 'arm64']))

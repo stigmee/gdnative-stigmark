@@ -2,18 +2,18 @@
 
 This repo contains 4 projects :
 
-- a statically / dynamically build (written in) Rust library that provides an API to access remote stigmark server (https://github.com/stigmee/stigmark-rocket-rs).
-- a command line example written in C++11 that shows how to use that library.
-- a GDNative module providing API access to Godot Scripts
-- a GDNative application showing how to use the GDNative module
+- a statically / dynamically build (written in) Rust library that provides an API to access remote stigmark server (https://github.com/stigmee/stigmark-rocket-rs). See [src](src) folder.
+- a GDNative module providing API access to Godot Scripts needed for the Stigmee project. See [gdstigmark/](gdstigmark/) folder.
+- a command line example written in C++11 that shows how to use that library. See [examples/console/](examples/console/) folder.
+- a GDNative application showing how to use the GDNative module. See [examples/godot/](examples/godot/) folder.
 
 ### Dependencies
 
 In order to build this repo, you will need :
 
-- rust/cargo compiler
-- a c/c++ compiler gcc/clang
-- scons
+- [rust/cargo](https://www.rust-lang.org) compiler,
+- a C/C++ compiler: gcc/clang,
+- the python3 [scons](https://scons.org/) build tool.
 
 ### Dependency: Rust
 
@@ -23,9 +23,9 @@ In order to compile the Rust library, you'll have to install the Rust compiler t
 
 ### Build
 
-On Windows 10, you'll need the x64 native tools command prompt (from either Visual Studio or Build tools with Windows SDK).
+On Windows 10, you'll need the **x64 native tools command prompt** (from either Visual Studio or Build tools with Windows SDK).
 
-1- Open the command prompt. If ok, the command "cl" should work :
+1- Open the command prompt. If ok, the command `cl` should work :
 
 ```text
 C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools>cl
@@ -35,7 +35,7 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 usage: cl [ option... ] filename... [ /link linkoption... ]
 ```
 
-2- Change directory to ${workspace}\godot\gdnative\stigmark
+2- Change directory to `${workspace}\godot\gdnative\stigmark`:
 
 ```text
 d:
@@ -106,7 +106,7 @@ D:\sm\workspace\godot\gdnative\stigmark>cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 50.29s
 ```
 
-4- Now compile the GDNative module
+4- Now, compile the GDNative module:
 
 ```text
 cd src-stigmarkmod
@@ -138,7 +138,7 @@ project\gdnative\windows\libstigmark.dll
 1 File(s) copied
 ```
 
-5- Now compile the Godot test app by opening ${workspace}\godot\gdnative\stigmark\src-stigmarkapp\project.godot
+5- Now, compile the Godot test app by opening `${workspace}\godot\gdnative\stigmark\src-stigmarkapp\project.godot`.
 
 ### TODO
 

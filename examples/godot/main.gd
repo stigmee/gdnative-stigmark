@@ -34,48 +34,44 @@ func _ready():
 var keyword = ""
 
 func _on_Button_pressed():
-	var lines = get_node("TextEdit")
-	
+	$TextEdit.text = ""
 	var collections = stigmark.search(keyword)
 	var n = 0
 	for collection in collections:
 		var collection_id = collection.collection_id;
 		var keyword_id = collection.keyword_id;
 		var urls = collection.urls;
-		lines.text = lines.text + \
-			"collection: %d, keyword: %d\n" % [collection_id, keyword_id]
+		$TextEdit.text += "collection: %d, keyword: %d\n" % [collection_id, keyword_id]
 		for url in urls:
 			n += 1
-			lines.text = lines.text + "  %d: %s\n" % [url.id, url.uri]
+			$TextEdit.text += "  %d: %s\n" % [url.id, url.uri]
 	if n == 0:
-		lines.text = lines.text + "not found\n"
-	pass # Replace with function body.
+		$TextEdit.text += "not found\n"
+	pass
 
 
 func _on_LineEdit_text_changed(new_text):
 	keyword = new_text
-	pass # Replace with function body.
+	pass
 
-
+# FIXME: "not found\n" never reached. Add timeout ?
 func _on_ButtonAsync_pressed():
 	stigmark.search_async(keyword)
 	pass
 
-
 func _on_Stigmark_on_search(collections):
 	print("got collections:")
 	print(collections)
-	var lines = get_node("TextEdit")
+	$TextEdit.text = ""
 	var n = 0
 	for collection in collections:
 		var collection_id = collection.collection_id;
 		var keyword_id = collection.keyword_id;
 		var urls = collection.urls;
-		lines.text = lines.text + \
-			"collection: %d, keyword: %d\n" % [collection_id, keyword_id]
+		$TextEdit.text += "collection: %d, keyword: %d\n" % [collection_id, keyword_id]
 		for url in urls:
 			n += 1
-			lines.text = lines.text + "  %d: %s\n" % [url.id, url.uri]
+			$TextEdit.text += "  %d: %s\n" % [url.id, url.uri]
 	if n == 0:
-		lines.text = lines.text + "not found\n"
-	pass # Replace with function body.
+		$TextEdit.text += "not found\n"
+	pass

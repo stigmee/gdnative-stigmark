@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "",
 "class": "Stigmark",
 "language": "NativeScript",
-"path": "res://bin/stigmark.gdns"
+"path": "res://libs/stigmark.gdns"
 } ]
 _global_script_class_icons={
 "Stigmark": ""

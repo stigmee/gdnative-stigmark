@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
-[ext_resource path="res://bin/stigmark.gdns" type="Script" id=2]
+[ext_resource path="res://libs/stigmark.gdns" type="Script" id=2]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -54,4 +54,3 @@ script = ExtResource( 2 )
 [connection signal="text_changed" from="LineEdit" to="." method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="ButtonAsync" to="." method="_on_ButtonAsync_pressed"]
-[connection signal="on_search" from="Stigmark" to="." method="_on_Stigmark_on_search"]

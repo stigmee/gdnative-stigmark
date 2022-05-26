@@ -94,7 +94,7 @@ elif compile_mode == 'r':
 
 # The godot library we want to create
 target_path = env['build_path']
-target_library = 'libstigmark'
+target_library = 'libgdstigmark'
 
 # Platform specific compilation
 if platform == 'osx':
